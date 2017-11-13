@@ -35,31 +35,11 @@ public class LoginForm extends Application
 		
 		this.initStage();
 	}
-	
 
 	public static void main(String[] args) 
 	{
 		launch(args);
-		
 	}
-
-	/*
-	@Override
-	public void handle(ActionEvent event) {
-		if(event.getSource() == signInButton)
-		{
-			logIn();
-		}
-	}
-
-	public void handle(KeyEvent keyEvent)
-	{
-		if(keyEvent.getCode() == KeyCode.ENTER)
-		{
-			logIn();
-		}
-	}
-	*/
 
 	private void logIn()
 	{
@@ -110,22 +90,8 @@ public class LoginForm extends Application
 
 		Scene scene = new Scene(grid, 300, 275);
 		scene.getStylesheets() .add(getClass().getResource("application.css").toExternalForm());
-		/*
-		userLoginField.setOnKeyPressed(event -> {
-			   if(event.getCode() == KeyCode.ENTER){
-				 handle(event);
-			   }
-			});
-		userPassField.setOnKeyPressed(event -> {
-			   if(event.getCode() == KeyCode.ENTER){
-				 handle(event);
-			   }
-			});
-		*/
 
-
-		// Pressing Enter works for every node on the page
-		// with only 1 EventHandling
+		// Pressing Enter works as pressing button "Sign in"
 		grid.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 			if (event.getCode() == KeyCode.ENTER) {
 				this.logIn();
