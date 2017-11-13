@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 
 public class LoginForm extends Application
 {
-	// dlaczego jest Text i Label?
 	private Text formTitle, notification;
 	private Label userLogin, userPass;
 	private TextField userLoginField;
