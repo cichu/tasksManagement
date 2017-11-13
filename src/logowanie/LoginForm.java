@@ -21,6 +21,8 @@ public class LoginForm extends Application
 	private Label userLogin, userPass;
 	private TextField userLoginField;
 	private PasswordField userPassField;
+
+	// temporary
 	private String login="Dawid";
 	private String password="Krawczyk";
 
