@@ -1,0 +1,39 @@
+.root
+{
+	-fx-background-image: url("1234.jpg");
+
+}
+.label
+{
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+	-fx-text-fill: #B0B0B0;
+}
+#formTitle
+{
+	-fx-font-size: 32px;
+	-fx-font-family: "Arial Black";
+	-fx-fill: #EAEAEA;
+	-fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.7), 6, 0.0, 0, 2);
+}
+.button
+{
+	-fx-background-color:
+		linear-gradient(#40ccda, #208ada);
+}
+.button:hover
+{
+	-fx-background-color:
+		linear-gradient(#50e0ff, #20a0ff);
+}
+.button:pressed
+{
+	-fx-background-color:
+		linear-gradient(#20a0bd, #0070d8, #20a0bd);
+		-fx-text-fill: #70ecff;
+}
+#notification
+{
+	-fx-fill: #ff9070;
+	-fx-font-weight:bold;
+}
