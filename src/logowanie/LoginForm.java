@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 
 public class LoginForm extends Application
 {
+	private MainApp mainApp;
+
 	private Text formTitle, notification;
 	private Label userLogin, userPass;
 	private TextField userLoginField;
@@ -27,35 +29,62 @@ public class LoginForm extends Application
 	private String password="Krawczyk";
 
 	private Stage primaryStage;
-	
+
 	@Override
 	public void start (Stage primaryStage)
 	{
 		this.primaryStage = primaryStage;
 		primaryStage.setTitle("Javafx Login Form");
-		
+
 		this.initStage();
 	}
 
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
 		launch(args);
 	}
 
 	private void logIn()
 	{
-		if(userLoginField.getText().equals(login)&& userPassField.getText().equals(password)) {
+		Register register = this.mainApp.getRegister();
+		Uzytkownicy user = this.findUserByNameOrEmail(this.userLoginField.getText());
+
+		if (user == null) {
+			// User not found
+			this.notification.setText("Nie znaleziono takiego użytkownika");
+		} else if (user.password.equals(this.userPassField.getText())) {
+			// User logged successfully
+			this.notification.setText("Zalogowano");
+			this.mainApp.setLoggedUser(user);
+		} else {
+			// User password does not match
+			this.notification.setText("Wprowadzone hasło jest nie poprawne");
+		}
+
+		/*
+		System.out.println(register.lista.get(0).mail);
+		if (userLoginField.getText().equals(login)&& userPassField.getText().equals(password)) {
 			this.openMenu();
 		}
 		else {
 			notification.setText("Zly login");
-		}
+		} */
+	}
+	private void register()
+	{
+		this.openRegister();
 	}
 
 	private void openMenu() {
 		Menu menu = new Menu();
 		this.primaryStage.close();
 		menu.start(new Stage());
+	}
+
+	private void openRegister() {
+		Register register = new Register();
+		this.primaryStage.close();
+		register.start(new Stage());
 	}
 
 	private void initStage() {
@@ -86,6 +115,11 @@ public class LoginForm extends Application
 		GridPane.setHalignment(signInButton, HPos.RIGHT);
 		grid.add(signInButton, 1, 4);
 
+		Button registerButton = new Button("Register");
+		registerButton.setOnAction(event -> register());
+		GridPane.setHalignment(registerButton, HPos.LEFT);
+		grid.add(registerButton, 1, 4);
+
 		notification = new Text();
 		grid.add(notification,1,6);
 
@@ -104,5 +138,26 @@ public class LoginForm extends Application
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+
+	private Uzytkownicy findUserByNameOrEmail(String nameOrEmail) {
+		Register register = this.mainApp.getRegister();
+
+		for (Uzytkownicy user : register.lista) {
+			if (user.firstName.equals(nameOrEmail)) {
+				return user;
+			}
+
+			if (user.mail.equals(nameOrEmail)) {
+				return user;
+			}
+		}
+
+		// returns null if no matching firstName or email is found
+		return null;
+	}
+
+	public void setMainApp(MainApp mainApp) {
+		this.mainApp = mainApp;
 	}
 }
