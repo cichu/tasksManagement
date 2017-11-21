@@ -56,6 +56,7 @@ public class LoginForm extends Application
 			// User logged successfully
 			this.notification.setText("Zalogowano");
 			this.mainApp.setLoggedUser(user);
+			this.mainApp.showMainMenu();
 		} else {
 			// User password does not match
 			this.notification.setText("Wprowadzone hasło jest nie poprawne");
@@ -159,5 +160,11 @@ public class LoginForm extends Application
 
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
+	}
+
+	public void hide() {
+		if (this.primaryStage != null) {
+			this.primaryStage.hide();
+		}
 	}
 }

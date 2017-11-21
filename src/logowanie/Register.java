@@ -72,7 +72,7 @@ public class Register extends Application
 
     private void openLoginForm() {
         this.primaryStage.close();
-        this.mainApp.showLoginPage();
+        this.mainApp.showLoginForm();
     }
 
     private void initStage() {
@@ -140,6 +140,11 @@ public class Register extends Application
         this.mainApp = mainApp;
     }
 
+    public void hide() {
+        if (this.primaryStage != null) {
+            this.primaryStage.hide();
+        }
+    }
 }
 
 
