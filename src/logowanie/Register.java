@@ -62,7 +62,7 @@ public class Register extends Application
         System.out.println(lista.size());
         System.out.println(lista.get(0).mail);
 
-        this.openLoginForm();
+        this.mainApp.showLoginForm();
 
         //}
         //	else {
@@ -70,10 +70,9 @@ public class Register extends Application
         //	}
     }
 
-    private void openLoginForm() {
-        this.primaryStage.close();
-        this.mainApp.showLoginForm();
-    }
+    /*private void openLoginForm() {
+
+    }*/
 
     private void initStage() {
         // prepare grid

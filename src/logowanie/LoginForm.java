@@ -83,9 +83,7 @@ public class LoginForm extends Application
 	}
 
 	private void openRegister() {
-		Register register = new Register();
-		this.primaryStage.close();
-		register.start(new Stage());
+		this.mainApp.showRegisterForm();
 	}
 
 	private void initStage() {
