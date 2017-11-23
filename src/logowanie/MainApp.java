@@ -20,7 +20,7 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
 
-        this.showLoginForm();
+        this.showMainMenu(); //this.showLoginForm();
     }
 
     public void showLoginForm() {
