@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 public class CalendarView extends Application {
 
     private final LocalTime firstSlotStart = LocalTime.of(0, 0);
-    private final Duration slotLength = Duration.ofMinutes(15);
+    private Duration slotLength = Duration.ofMinutes(15);
     private final LocalTime lastSlotStart = LocalTime.of(23, 59);
 
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
@@ -202,5 +202,9 @@ public class CalendarView extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public void setTimeSlotLength(int length) {
+        this.slotLength = Duration.ofMinutes(length);
     }
 }

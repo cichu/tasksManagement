@@ -12,8 +12,12 @@ public class LayoutController {
     @FXML
     void initialize() {
         this.calendarButton.setOnMouseClicked((event -> {
+            Stage stage = new Stage();
+            stage.setTitle("Kalendarz");
+
             CalendarView calendarView = new CalendarView();
-            calendarView.start(new Stage());
+            calendarView.setTimeSlotLength(60);
+            calendarView.start(stage);
         }));
     }
 }
