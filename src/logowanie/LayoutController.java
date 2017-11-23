@@ -2,6 +2,7 @@ package logowanie;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 public class LayoutController {
 
@@ -11,7 +12,8 @@ public class LayoutController {
     @FXML
     void initialize() {
         this.calendarButton.setOnMouseClicked((event -> {
-            
+            CalendarView calendarView = new CalendarView();
+            calendarView.start(new Stage());
         }));
     }
 }
