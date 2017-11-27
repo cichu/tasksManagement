@@ -23,7 +23,7 @@ public class Menu extends Application {
         this.primaryStage.setTitle("Menu");
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Menu.class.getResource("/layout.fxml"));
+        loader.setLocation(Menu.class.getResource("/logowanie/layout.fxml"));
 
         AnchorPane root = null;
 

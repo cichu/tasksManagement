@@ -20,7 +20,8 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
 
-        this.showLoginForm();
+        // TODO tymczasowe uruchamiania aplikacji bezpośrednio w menu głównym
+        this.showMainMenu(); //this.showLoginForm();
     }
 
     public void showLoginForm() {
