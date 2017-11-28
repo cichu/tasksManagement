@@ -13,7 +13,7 @@
 -fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
 -fx-text-fill: black;
 -fx-content-display: LEFT;
--fx-alignment: LEFT;
+-fx-alignment: center-left;
 }
 
 .button:focused {

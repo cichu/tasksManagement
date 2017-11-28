@@ -6,7 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class Menu extends Application {
 
@@ -22,8 +24,14 @@ public class Menu extends Application {
         this.primaryStage = stage;
         this.primaryStage.setTitle("Menu");
 
+        String path = System.getProperty("user.dir") + "\\src\\main\\java\\logowanie\\";
+        System.out.println(new File(path).toURI().toString());
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Menu.class.getResource("/logowanie/layout.fxml"));
+        try {
+            loader.setLocation(new File(path + "layout.fxml").toURI().toURL());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         AnchorPane root = null;
 

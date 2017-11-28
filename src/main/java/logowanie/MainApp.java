@@ -5,6 +5,14 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
+    /**
+     * PATH to the location from which program starts
+     * to create proper path to resource add packages
+     * divided by / with the file name with extension
+     * at the end
+     */
+    public static String PATH = "file:/" + System.getProperty("user.dir") + "\\src\\main\\java\\";
+
     private Register register;
     private LoginForm loginForm;
     private Menu mainMenu;

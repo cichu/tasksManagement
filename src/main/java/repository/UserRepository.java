@@ -23,7 +23,7 @@ public class UserRepository {
 	    session.getTransaction().commit();
 	    session.close();
 
- }
+ 	}
 	
 	public String getUserPassword(String mail)
 	{
@@ -35,6 +35,7 @@ public class UserRepository {
 		session.close();
 		return user.getPassword();
 	}
+
 	public void deleteUser(Long id){
 		session.beginTransaction();
         User user = (User) session.get(User.class,id);
@@ -42,7 +43,7 @@ public class UserRepository {
 	    session.getTransaction().commit();
 	    session.close();
 
-	  }
+	}
 }
 	
   
