@@ -46,6 +46,7 @@ public class CalendarView extends Application {
         LocalDate startOfWeek = today.minusDays(today.getDayOfWeek().getValue() - 1) ;
         LocalDate endOfWeek = startOfWeek.plusDays(6);
 
+        // przygotowanie timeSlotów
         for (LocalDate date = startOfWeek; ! date.isAfter(endOfWeek); date = date.plusDays(1)) {
             int slotIndex = 1 ;
 

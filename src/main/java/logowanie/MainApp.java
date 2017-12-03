@@ -16,9 +16,9 @@ public class MainApp extends Application {
     private Register register;
     private LoginForm loginForm;
     private Menu mainMenu;
-    private Stage primaryStage;
+    //private Stage primaryStage;
 
-    private Uzytkownicy loggedUser;
+    //private Uzytkownicy loggedUser;
 
     public static void main(String args[]) {
         launch(args);
@@ -26,7 +26,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        this.primaryStage = primaryStage;
+        //this.primaryStage = primaryStage;
 
         this.showLoginForm();
     }
@@ -84,10 +84,10 @@ public class MainApp extends Application {
             this.mainMenu.hide();
         }
     }
-
+    /*
     public void setLoggedUser(Uzytkownicy user) {
         this.loggedUser = user;
-    }
+    }*/
 
     public Register getRegister() {
         return this.register;

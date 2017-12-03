@@ -13,7 +13,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
@@ -27,14 +32,18 @@ import java.util.Locale;
 
 public class CalendarMonthView extends Application {
 
-    private final LocalDate firstSlotStart = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(),1);
+    // First day of current month
+    //private final LocalDate firstSlotStart = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(),1);
+    // One time slot = one day
+    // Period ==> days, weeks, months, years
+    // Duration ==> seconds, minutes, days
     private final Period slotLength = Period.ofDays(1);
     //private final Duration slotLength = Duration.ofDays(1);
-    private final LocalDate lastSlotStart = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().lengthOfMonth() - 1);
+    //private final LocalDate lastSlotStart = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().lengthOfMonth() - 1);
 
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
 
-    private final List<TimeSlot> timaSlots = new ArrayList<>();
+    private final List<TimeSlot> timeSlots = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -44,25 +53,26 @@ public class CalendarMonthView extends Application {
 
         LocalDate today = LocalDate.now();
         LocalDate startOfMonth = today.minusDays(today.getDayOfMonth() - 1);
-        LocalDate endOfMonth = startOfMonth.plusDays(today.getMonth().maxLength());
+        LocalDate endOfMonth = startOfMonth.plusDays(today.getMonth().maxLength() - 1);
+        
+        LocalDate startOfWeek = startOfMonth.minusDays(startOfMonth.getDayOfWeek().getValue() - 1); 
 
-        for (LocalDate date = startOfMonth; ! date.isAfter(endOfMonth); date = date.plusDays(1)) {
-            int slotIndex = 1;
-
-            for (LocalDate startDay = date;
-                 ! startDay.isAfter(lastSlotStart);
-                 startDay = startDay.plus(slotLength)) {
-
-                TimeSlot timeSlot = new TimeSlot(startDay, slotLength);
-                timaSlots.add(timeSlot);
-
-                registerDragHandlers(timeSlot, mouseAnchor);
-
-                // node, kolumna, rząd
-                calendarView.add(timeSlot.getView(), timeSlot.getDayOfWeek().getValue(), (int) Math.ceil(slotIndex/7));
-
-                slotIndex++;
+        int slotIndex = 1;
+        
+        // przechodzenie po tygodniach 
+        for (LocalDate date = startOfWeek; !date.isAfter(endOfMonth); /*dateMonth = dateMonth.plusDays(7)*/) {
+            
+            LocalDate endOfWeek = date.plusDays(6);
+            for (/*LocalDate date = date*/ ; !date.isAfter(endOfWeek); date = date.plusDays(1)) {
+            	TimeSlot timeSlot = new TimeSlot(date, slotLength);
+            	timeSlots.add(timeSlot);
+            	
+            	registerDragHandlers(timeSlot, mouseAnchor);
+            	
+            	calendarView.add(timeSlot.getView(), timeSlot.getDayOfWeek().getValue(), slotIndex);
             }
+            
+            slotIndex++;
         }
 
         DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E");
@@ -71,25 +81,58 @@ public class CalendarMonthView extends Application {
             Label label = new Label(date.format(dayFormatter));
             label.setPadding(new Insets(1));
             label.setTextAlignment(TextAlignment.CENTER);
-            GridPane.setHalignment(label, HPos.CENTER);
-            calendarView.add(label, date.getDayOfWeek().getValue(), 0);
+            StackPane stackPane = new StackPane();
+            stackPane.getStyleClass().add("day-header");
+            stackPane.getChildren().add(label);
+            GridPane.setHalignment(stackPane, HPos.CENTER);
+            calendarView.add(stackPane, date.getDayOfWeek().getValue(), 0);
         }
 
         // formatowanie numerów tygodni
-        int slotIndex = 1 ;
+        slotIndex = 1 ;
         //DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("w");
         for (LocalDate day = startOfMonth; !day.isAfter(endOfMonth); day = day.plusDays(7)) {
             int weekNumber = day.get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
             Label label = new Label(Integer.toString(weekNumber));
             label.setPadding(new Insets(2));
-            GridPane.setHalignment(label, HPos.RIGHT);
-            calendarView.add(label, 0, slotIndex);
+            StackPane stackPane = new StackPane();
+            stackPane.getChildren().add(label);
+            stackPane.getStyleClass().add("week-header");
+            GridPane.setHalignment(stackPane, HPos.RIGHT);
+            calendarView.add(stackPane, 0, slotIndex);
             slotIndex++ ;
         }
+        
+        // constraints nie działają
+        // tabela wciąż się nie rozciąga, tak aby zabierać całe dostępne miejsce
+        ColumnConstraints  c1 = new ColumnConstraints();
+        c1.setHgrow(Priority.NEVER);
+        ColumnConstraints  c2 = new ColumnConstraints();
+        c2.setHgrow(Priority.ALWAYS);
+        
+        RowConstraints r1 = new RowConstraints();
+        r1.setVgrow(Priority.NEVER);
+        RowConstraints r2 = new RowConstraints();
+        r2.setVgrow(Priority.ALWAYS);
+        
+        calendarView.getColumnConstraints().addAll(c1, c2, c2, c2, c2, c2, c2, c2);
+        calendarView.getRowConstraints().addAll(r1, r2, r2, r2, r2, r2);
 
-        ScrollPane scroller = new ScrollPane(calendarView);
+        //ScrollPane scroller = new ScrollPane(calendarView);
+        AnchorPane ap = new AnchorPane(calendarView);
+        //ap.getChildren().add(calendarView);
+        
+        AnchorPane.setBottomAnchor(calendarView, 0.0);
+        AnchorPane.setTopAnchor(calendarView, 0.0);
+        AnchorPane.setLeftAnchor(calendarView, 0.0);
+        AnchorPane.setRightAnchor(calendarView, 0.0);
+        
+        ap.setPrefHeight(Double.MAX_VALUE);
+        ap.setPrefWidth(Double.MAX_VALUE);
+        ap.setMaxHeight(Double.MAX_VALUE);
+        ap.setMaxWidth(Double.MAX_VALUE);
 
-        Scene scene = new Scene(scroller);
+        Scene scene = new Scene(ap);
         scene.getStylesheets().add(getClass().getResource("calendar-view.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -100,7 +143,7 @@ public class CalendarMonthView extends Application {
         timeSlot.getView().setOnDragDetected( event -> {
             mouseAnchor.set(timeSlot);
             timeSlot.getView().startFullDrag();
-            timaSlots.forEach(slot ->
+            timeSlots.forEach(slot ->
                 slot.setSelected(slot == timeSlot));
         });
 
@@ -115,7 +158,8 @@ public class CalendarMonthView extends Application {
     private class TimeSlot {
         private final LocalDate start;
         private final Period duration;
-        private final Region view;
+        private final Pane view;
+        private final Label dayNumber;
 
         private final BooleanProperty selected = new SimpleBooleanProperty();
 
@@ -135,9 +179,22 @@ public class CalendarMonthView extends Application {
             this.start = start;
             this.duration = duration;
 
-            view = new Region();
+            view = new Pane();
             view.setMinSize(80, 80);
             view.getStyleClass().add("time-slot");
+            
+            dayNumber = new Label();
+            dayNumber.setText(Integer.toString(start.getDayOfMonth()));
+            if (start.getMonth() == LocalDate.now().getMonth()) {
+            	// days belong to currently view month
+                dayNumber.getStyleClass().add("day-number");
+            } else {
+            	// days from other months
+            	dayNumber.getStyleClass().add("day-number-other");
+            }
+            dayNumber.setPadding(new Insets(1));
+            
+            view.getChildren().add(dayNumber);
 
             selectedProperty().addListener((obs, wasSelected, isSelected) -> {
                 view.pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, isSelected);

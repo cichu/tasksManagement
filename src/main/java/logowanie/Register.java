@@ -97,12 +97,6 @@ public class Register extends Application {
 		this.mainApp.showLoginForm();
 	}
 
-	/*
-	 * private void openLoginForm() {
-	 * 
-	 * }
-	 */
-
 	private void initStage() {
 		String path = System.getProperty("user.dir") + "\\src\\main\\java\\logowanie\\";
 		// prepare grid
