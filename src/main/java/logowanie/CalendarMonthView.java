@@ -75,20 +75,20 @@ public class CalendarMonthView extends Application {
             slotIndex++;
         }
 
+        // formatowanie nazw dni na górze tabeli
         DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E");
-
         for (LocalDate date = startOfMonth; ! date.isAfter(endOfMonth); date = date.plusDays(1)) {
             Label label = new Label(date.format(dayFormatter));
             label.setPadding(new Insets(1));
-            label.setTextAlignment(TextAlignment.CENTER);
+            //label.setTextAlignment(TextAlignment.CENTER);
             StackPane stackPane = new StackPane();
-            stackPane.getStyleClass().add("day-header");
             stackPane.getChildren().add(label);
+            stackPane.getStyleClass().add("day-header");
             GridPane.setHalignment(stackPane, HPos.CENTER);
             calendarView.add(stackPane, date.getDayOfWeek().getValue(), 0);
         }
 
-        // formatowanie numerów tygodni
+        // formatowanie numerów tygodni po lewej stronie tabeli
         slotIndex = 1 ;
         //DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("w");
         for (LocalDate day = startOfMonth; !day.isAfter(endOfMonth); day = day.plusDays(7)) {
@@ -102,9 +102,7 @@ public class CalendarMonthView extends Application {
             calendarView.add(stackPane, 0, slotIndex);
             slotIndex++ ;
         }
-        
-        // constraints nie działają
-        // tabela wciąż się nie rozciąga, tak aby zabierać całe dostępne miejsce
+
         ColumnConstraints  c1 = new ColumnConstraints();
         c1.setHgrow(Priority.NEVER);
         ColumnConstraints  c2 = new ColumnConstraints();
@@ -120,22 +118,21 @@ public class CalendarMonthView extends Application {
 
         //ScrollPane scroller = new ScrollPane(calendarView);
         AnchorPane ap = new AnchorPane(calendarView);
-        //ap.getChildren().add(calendarView);
         
         AnchorPane.setBottomAnchor(calendarView, 0.0);
         AnchorPane.setTopAnchor(calendarView, 0.0);
         AnchorPane.setLeftAnchor(calendarView, 0.0);
         AnchorPane.setRightAnchor(calendarView, 0.0);
-        
-        ap.setPrefHeight(Double.MAX_VALUE);
-        ap.setPrefWidth(Double.MAX_VALUE);
-        ap.setMaxHeight(Double.MAX_VALUE);
-        ap.setMaxWidth(Double.MAX_VALUE);
 
         Scene scene = new Scene(ap);
         scene.getStylesheets().add(getClass().getResource("calendar-view.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        // set after showing primaryStage
+        // so that ap width and height are already set
+        primaryStage.setMinWidth(ap.getWidth() + 20);
+        primaryStage.setMinHeight(ap.getHeight() + 40);
     }
 
     private void registerDragHandlers(TimeSlot timeSlot, ObjectProperty<TimeSlot> mouseAnchor) {

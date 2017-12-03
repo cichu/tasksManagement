@@ -20,9 +20,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
@@ -72,9 +70,12 @@ public class CalendarView extends Application {
         for (LocalDate date = startOfWeek; ! date.isAfter(endOfWeek); date = date.plusDays(1)) {
             Label label = new Label(date.format(dayFormatter));
             label.setPadding(new Insets(1));
-            label.setTextAlignment(TextAlignment.CENTER);
-            GridPane.setHalignment(label, HPos.CENTER);
-            calendarView.add(label, date.getDayOfWeek().getValue(), 0);
+            //label.setTextAlignment(TextAlignment.CENTER);
+            StackPane stackPane = new StackPane();
+            stackPane.getChildren().add(label);
+            stackPane.getStyleClass().add("day-header");
+            GridPane.setHalignment(stackPane, HPos.CENTER);
+            calendarView.add(stackPane, date.getDayOfWeek().getValue(), 0);
         }
 
         int slotIndex = 1 ;
@@ -84,18 +85,47 @@ public class CalendarView extends Application {
              startTime = startTime.plus(slotLength)) {
             Label label = new Label(startTime.format(timeFormatter));
             label.setPadding(new Insets(2));
-            GridPane.setHalignment(label, HPos.RIGHT);
-            calendarView.add(label, 0, slotIndex);
+            StackPane stackPane = new StackPane();
+            stackPane.getChildren().add(label);
+            stackPane.getStyleClass().add("hour-header");
+            GridPane.setHalignment(stackPane, HPos.RIGHT);
+            calendarView.add(stackPane, 0, slotIndex);
             slotIndex++ ;
         }
 
-        ScrollPane scroller = new ScrollPane(calendarView);
+        ColumnConstraints c1 = new ColumnConstraints();
+        c1.setHgrow(Priority.NEVER);
+        ColumnConstraints c2 = new ColumnConstraints();
+        c2.setHgrow(Priority.ALWAYS);
 
-        Scene scene = new Scene(scroller);
+        calendarView.getColumnConstraints().addAll(c1, c2, c2, c2, c2, c2, c2, c2);
+
+        RowConstraints r1 = new RowConstraints();
+        r1.setVgrow(Priority.NEVER);
+        RowConstraints r2 = new RowConstraints();
+        r2.setVgrow(Priority.ALWAYS);
+
+        calendarView.getRowConstraints().add(r1);
+        for (int row = 0; row < 24; ++row) {
+            calendarView.getRowConstraints().add(r2);
+        }
+
+        //ScrollPane scroller = new ScrollPane(calendarView);
+
+        AnchorPane ap = new AnchorPane(calendarView);
+
+        AnchorPane.setBottomAnchor(calendarView, 0.0);
+        AnchorPane.setTopAnchor(calendarView, 0.0);
+        AnchorPane.setLeftAnchor(calendarView, 0.0);
+        AnchorPane.setRightAnchor(calendarView, 0.0);
+
+        Scene scene = new Scene(ap);
         scene.getStylesheets().add(getClass().getResource("calendar-view.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        primaryStage.setMinHeight(ap.getHeight() + 20);
+        primaryStage.setMinWidth(ap.getWidth() + 20);
     }
 
     // Registers handlers on the time slot to manage selecting a range of slots in the grid.

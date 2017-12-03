@@ -19,15 +19,23 @@
 	-fx-text-fill: #B0B0B0;
 }
 
+/* Week number on the left of the table */
+/*
 .week-header {
-	-fx-background-color: #708EA4;
+	-fx-background-color: #4998D4;
 	
 }
 
 .week-header .label {
 	-fx-text-fill: white;
+} */
+
+/* Day */
+/* .day-header {
+	-fx-background-color: #4998D4;
+	-fx-alignment: center;
 }
 
-.day-header {
-	-fx-background-color: #708EA4;
-}
+.day-header .label {
+	-fx-text-fill: white;
+} */
