@@ -1,0 +1,41 @@
+.time-slot {
+	-fx-background-color: black, white ;
+	-fx-background-insets: 0, 1 1 1 1 ;
+}
+
+.time-slot:selected {
+	-fx-background-color: #5EB8FD ;
+}
+
+.day-number {
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+	-fx-text-fill: black;
+}
+
+.day-number-other {
+	-fx-font-size: 12px;
+	-fx-font-weight: bold;
+	-fx-text-fill: #B0B0B0;
+}
+
+/* Week number on the left of the table */
+/*
+.week-header {
+	-fx-background-color: #4998D4;
+	
+}
+
+.week-header .label {
+	-fx-text-fill: white;
+} */
+
+/* Day */
+/* .day-header {
+	-fx-background-color: #4998D4;
+	-fx-alignment: center;
+}
+
+.day-header .label {
+	-fx-text-fill: white;
+} */
