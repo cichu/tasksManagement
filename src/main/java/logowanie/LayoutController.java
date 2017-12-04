@@ -12,8 +12,8 @@ public class LayoutController {
     @FXML
     void initialize() {
         this.calendarButton.setOnMouseClicked((event -> {
-            showCalendarWeekView();
-            //showCalendarMonthView();
+            //showCalendarWeekView();
+            showCalendarMonthView();
         }));
     }
 

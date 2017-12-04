@@ -1,22 +1,28 @@
 .time-slot {
-	-fx-background-color: black, white ;
-	-fx-background-insets: 0, 1 1 1 1 ;
+	-fx-background-color: #adadad, white ;
+	-fx-background-insets: 0, 1 0 0 1 ;
 }
 
 .time-slot:selected {
-	-fx-background-color: #5EB8FD ;
+	/*-fx-background-color: #5EB8FD ;*/
+	-fx-background-color:
+		black,
+	    linear-gradient(#def0f4, /*#d2eaef,*/ #c9e6ed);
+	-fx-background-insets: 0, 1;
 }
 
 .day-number {
 	-fx-font-size: 12px;
 	-fx-font-weight: bold;
 	-fx-text-fill: black;
+	-fx-padding: 2 4;
 }
 
 .day-number-other {
 	-fx-font-size: 12px;
 	-fx-font-weight: bold;
-	-fx-text-fill: #B0B0B0;
+	-fx-text-fill: #636363;
+	-fx-padding: 2 4;
 }
 
 /* Week number on the left of the table */

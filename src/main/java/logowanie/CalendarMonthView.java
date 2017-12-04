@@ -33,7 +33,7 @@ import java.util.Locale;
 public class CalendarMonthView extends Application {
 
     // First day of current month
-    //private final LocalDate firstSlotStart = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(),1);
+    private final LocalDate firstSlotStart = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(),1);
     // One time slot = one day
     // Period ==> days, weeks, months, years
     // Duration ==> seconds, minutes, days
@@ -137,18 +137,18 @@ public class CalendarMonthView extends Application {
 
     private void registerDragHandlers(TimeSlot timeSlot, ObjectProperty<TimeSlot> mouseAnchor) {
         // TODO
-        timeSlot.getView().setOnDragDetected( event -> {
-            mouseAnchor.set(timeSlot);
-            timeSlot.getView().startFullDrag();
+        timeSlot.getView().setOnMouseClicked( event -> {
+            //mouseAnchor.set(timeSlot);
+            //timeSlot.getView().startFullDrag();
             timeSlots.forEach(slot ->
                 slot.setSelected(slot == timeSlot));
         });
-
+        /*
         timeSlot.getView().setOnMouseDragEntered( event -> {
             TimeSlot startSlot = mouseAnchor.get();
             //timaSlots.forEach(isBetween());
         });
-
+         */
         timeSlot.getView().setOnMouseReleased( event -> mouseAnchor.set(null));
     }
 
@@ -209,5 +209,9 @@ public class CalendarMonthView extends Application {
         public DayOfWeek getDayOfWeek() {
             return this.start.getDayOfWeek();
         }
+    }
+    
+    public static void main(String args[]) {
+    	launch(args);
     }
 }
