@@ -25,6 +25,17 @@
 	-fx-padding: 2 4;
 }
 
+.task-pane {
+/*	-fx-padding: 1px;
+	-fx-border-insets: 1px;
+	-fx-background-insets: 1px; */
+    -fx-background-color: #def0f9;
+}
+
+.tasks-grid {
+	-fx-padding: 4;
+}
+
 /* Week number on the left of the table */
 /*
 .week-header {
