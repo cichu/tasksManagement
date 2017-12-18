@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.Task;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -169,6 +170,30 @@ public class CalendarView extends Application {
         return daysBetween && timesBetween ;
     }
 
+    // Nie da się ustawić zadania w czasie
+    // można je ustawić, tylko i wyłącznie, którego dnia ma być wykonane.
+    // Jest tak ponieważ w bazie danych te inforamcje przechowywane są
+    // jako 'Date', a nie 'Timestamp'.
+
+    /* public boolean addTask(Task task) {
+    	LocalDate date = task.getDueDate().toLocalDate();
+
+    	LocalDate startOfWeek = LocalDate.now();
+    	LocalDate endOfWeek = startOfWeek.plusDays(6);
+
+    	for (LocalDate dayOfWeek = startOfWeek; ! date.isAfter(endOfWeek); date = date.plusDays(1)) {
+	        if (date.getDayOfWeek().equals(dayOfWeek)) {
+	            for (TimeSlot timeSlot : this.timeSlots) {
+	                if (timeSlot.start.isEqual()) {
+	                    timeSlot.addTask(task);
+	                    return true;
+	                }
+	            }
+	        }
+    	}
+        return false;
+    } */
+
     // Class representing a time interval, or "Time Slot", along with a view.
     // View is just represented by a region with minimum size, and style class.
 
@@ -176,9 +201,11 @@ public class CalendarView extends Application {
 
     public static class TimeSlot {
 
-        private final LocalDateTime start ;
-        private final Duration duration ;
-        private final Region view ;
+        private final LocalDateTime start;
+        private final Duration duration;
+        private final VBox view;
+
+        private final List<Task> tasks = new ArrayList<>();
 
         private final BooleanProperty selected = new SimpleBooleanProperty();
 
@@ -198,7 +225,7 @@ public class CalendarView extends Application {
             this.start = start ;
             this.duration = duration ;
 
-            view = new Region();
+            view = new VBox();
             view.setMinSize(80, 20);
             view.getStyleClass().add("time-slot");
 
@@ -227,6 +254,21 @@ public class CalendarView extends Application {
             return view;
         }
 
+        private void displayTasks() {
+            this.view.getChildren().clear();
+
+            for (Task task : this.tasks) {
+                Label label = new Label(task.getName());
+                AnchorPane pane = new AnchorPane(label);
+                pane.getStyleClass().add("task-pane");
+                view.getChildren().add(pane);
+            }
+        }
+
+        public void addTask(Task task) {
+            this.tasks.add(task);
+            this.displayTasks();
+        }
     }
 
 

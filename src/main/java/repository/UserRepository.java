@@ -1,12 +1,12 @@
 package repository;
 
 import org.hibernate.Session;
-import org.hibernate.query.*;
-import org.hibernate.query.Query;
+//import org.hibernate.query.*;
+//import org.hibernate.query.Query;
 
 import javax.persistence.TypedQuery;
 
-import org.hibernate.*;
+//import org.hibernate.*;
 
 import data.User;
 
