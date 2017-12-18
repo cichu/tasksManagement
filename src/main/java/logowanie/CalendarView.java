@@ -21,13 +21,12 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class CalendarView extends Application {
 
     private final LocalTime firstSlotStart = LocalTime.of(0, 0);
-    private Duration slotLength = Duration.ofMinutes(15);
+    private Duration slotLength = Duration.ofMinutes(60);
     private final LocalTime lastSlotStart = LocalTime.of(23, 59);
 
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
