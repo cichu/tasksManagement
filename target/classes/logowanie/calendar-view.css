@@ -25,10 +25,6 @@
 	-fx-padding: 2 4;
 }
 
-.day-number-other:selected {
-	-fx-text-fill: red;
-}
-
 /* Week number on the left of the table */
 /*
 .week-header {

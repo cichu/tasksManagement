@@ -1,6 +1,5 @@
 package logowanie;
 
-import data.Task;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -13,7 +12,13 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
@@ -65,10 +70,6 @@ public class CalendarMonthView extends Application {
             	registerDragHandlers(timeSlot, mouseAnchor);
             	
             	calendarView.add(timeSlot.getView(), timeSlot.getDayOfWeek().getValue(), slotIndex);
-
-            	// TODO
-                //
-
             }
             
             slotIndex++;
@@ -99,7 +100,7 @@ public class CalendarMonthView extends Application {
             stackPane.getStyleClass().add("week-header");
             GridPane.setHalignment(stackPane, HPos.RIGHT);
             calendarView.add(stackPane, 0, slotIndex);
-            slotIndex++;
+            slotIndex++ ;
         }
 
         ColumnConstraints  c1 = new ColumnConstraints();
@@ -157,10 +158,6 @@ public class CalendarMonthView extends Application {
         private final Pane view;
         private final Label dayNumber;
 
-        // tasks for that day
-        private final List<Task> tasks = new ArrayList<>();
-        private final GridPane tasksGrid;
-
         private final BooleanProperty selected = new SimpleBooleanProperty();
 
         public final BooleanProperty selectedProperty() {
@@ -179,7 +176,7 @@ public class CalendarMonthView extends Application {
             this.start = start;
             this.duration = duration;
 
-            view = new VBox();
+            view = new Pane();
             view.setMinSize(80, 80);
             view.getStyleClass().add("time-slot");
             
@@ -193,31 +190,12 @@ public class CalendarMonthView extends Application {
             	dayNumber.getStyleClass().add("day-number-other");
             }
             dayNumber.setPadding(new Insets(1));
-
-            tasksGrid = new GridPane();
-
-            view.getChildren().addAll(dayNumber, tasksGrid);
+            
+            view.getChildren().add(dayNumber);
 
             selectedProperty().addListener((obs, wasSelected, isSelected) -> {
                 view.pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, isSelected);
             });
-        }
-
-        private void displayTasks() {
-            tasksGrid.getChildren().clear();
-            int rowIndex = 0;
-
-            for (Task task : tasks) {
-                Label label = new Label(task.getName());
-                label.getStyleClass().add("task");
-                GridPane.setRowIndex(label, rowIndex++);
-                tasksGrid.getChildren().add(label);
-            }
-        }
-
-        public void addTask(Task task) {
-            this.tasks.add(task);
-            this.displayTasks();
         }
 
         public LocalDate getStart() {
@@ -232,7 +210,7 @@ public class CalendarMonthView extends Application {
             return this.start.getDayOfWeek();
         }
     }
-
+    
     public static void main(String args[]) {
     	launch(args);
     }

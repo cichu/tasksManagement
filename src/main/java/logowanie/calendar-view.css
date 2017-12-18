@@ -25,10 +25,6 @@
 	-fx-padding: 2 4;
 }
 
-.task {
-    -fx-background-color: red;
-}
-
 /* Week number on the left of the table */
 /*
 .week-header {

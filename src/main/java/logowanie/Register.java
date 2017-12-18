@@ -1,6 +1,8 @@
 package logowanie;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,15 +15,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import repository.HibernateUtil;
 import repository.UserRepository;
 
 import java.io.File;
-import java.util.*;
+import java.security.MessageDigest;
+//import java.util.*;
+import java.security.NoSuchAlgorithmException;
 
 import org.hibernate.Session;
 
@@ -32,13 +39,12 @@ public class Register extends Application {
 
 	private Text formTitle, notification;
 	private Label userMail, userPass, userPassCorrect;
-	private TextField userMailField;
-	private PasswordField userPassField, userPassFieldCorrect;
+	private static TextField userMailField;
+	private static PasswordField userPassField, userPassFieldCorrect;
 	private Label userFirstName, userLastName;
-	private TextField userFirstNameField;
-	private TextField userLastNameField;
+	private static TextField userFirstNameField;
+	private static TextField userLastNameField;
 	// Uzytkownicy o1=new Uzytkownicy();
-	ArrayList<Uzytkownicy> lista = new ArrayList<Uzytkownicy>();
 
 	// temporary
 
@@ -48,7 +54,8 @@ public class Register extends Application {
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
 		primaryStage.setTitle("Javafx Login Form");
-
+		primaryStage.setResizable(false);
+		primaryStage.initStyle(StageStyle.UNDECORATED);
 		this.initStage();
 	}
 
@@ -68,19 +75,20 @@ public class Register extends Application {
 		    	
 		    	
 		    	
-		Uzytkownicy o1 = new Uzytkownicy();
-		o1.firstName = userFirstNameField.getText();
-		o1.lastName = userLastNameField.getText();
-		o1.mail = userMailField.getText();
-		o1.password = userPassField.getText();
-		user.setMail(o1.mail);
-		  user.setFirstName(o1.firstName);
-		  user.setLastName(o1.lastName);
-		  user.setPassword(o1.password);
-		if (checkAll(o1) == true) {
+		
+
+		if (checkAll() == true) {
+			user.setMail(userMailField.getText());
+			  user.setFirstName(userFirstNameField.getText());
+			  user.setLastName(userLastNameField.getText());
+			  try {
+				user.setPassword(sha1(userPassField.getText()));
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			 UserRepository userRepo = new UserRepository(session);
 		    	userRepo.addUser(user);
-			lista.add(o1);
 		//	System.out.println(lista.size());
 	//		System.out.println(lista.get(0).mail);
 			    	
@@ -103,64 +111,109 @@ public class Register extends Application {
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(5));
 		grid.setAlignment(Pos.CENTER);
-		grid.setHgap(10);
-		grid.setVgap(10);
+		grid.setHgap(40);
+		grid.setVgap(30);
 		grid.setPadding(new Insets(40, 40, 40, 40));
 		final ImageView imv = new ImageView();
-        final Image image2 = new Image(new File("2.png").toURI().toString());
+        final Image image2 = new Image(new File("logo_do_logowania2").toURI().toString());
         imv.setImage(image2);
-
+        
         final HBox pictureRegion = new HBox();
+        pictureRegion.setAlignment(Pos.TOP_CENTER);
         pictureRegion.getChildren().add(imv);
 		//grid.add(pictureRegion, 0, 8);
-
-		formTitle = new Text("Welcome");
-		grid.add(formTitle, 0, 0, 2, 1);
-
-		userMail = new Label("user Mail: ");
+		
+        formTitle = new Text("Welcome");
+ 		grid.add(formTitle, 0, 0, 2, 1);
+ 		formTitle.getStyleClass().add("welcome");
+         
+        
+		userMail = new Label("User e-mail: ");
 		grid.add(userMail, 0, 1);
-
+		userMail.getStyleClass().add("userPassword");
+		
 		userMailField = new TextField();
+		userMailField.setPromptText("Enter your e-mail");
 		grid.add(userMailField, 1, 1);
-
-		userPass = new Label("user password:");
+		userMailField.getStyleClass().add("pass-field");
+		
+		userPass = new Label("User password:");
 		grid.add(userPass, 0, 2);
-
+		userPass.getStyleClass().add("userPassword");
+		
 		userPassField = new PasswordField();
+		userPassField.setPromptText("Enter your password");
 		grid.add(userPassField, 1, 2);
+		userPassField.getStyleClass().add("pass-field");
 
-		userPassCorrect = new Label("user password confirmed:");
+		userPassCorrect = new Label("User password confirmed:");
 		grid.add(userPassCorrect, 0, 3);
+		userPassCorrect.getStyleClass().add("userPassword");
 
 		userPassFieldCorrect = new PasswordField();
+		userPassFieldCorrect.setPromptText("Confirm your password");
 		grid.add(userPassFieldCorrect, 1, 3);
+		userPassFieldCorrect.getStyleClass().add("pass-field");
 
-		userFirstName = new Label("user first Name: ");
+		userFirstName = new Label("User first Name: ");
 		grid.add(userFirstName, 0, 4);
+		userFirstName.getStyleClass().add("userPassword");
 
 		userFirstNameField = new TextField();
+		userFirstNameField.setPromptText("Enter your First Name");
 		grid.add(userFirstNameField, 1, 4);
+		userFirstNameField.getStyleClass().add("pass-field");
 
-		userLastName = new Label("user Last Name:");
+		userLastName = new Label("User Last Name:");
 		grid.add(userLastName, 0, 5);
+		userLastName.getStyleClass().add("userPassword");
 
 		userLastNameField = new TextField();
+		userLastNameField.setPromptText("Enter your Last Name");
 		grid.add(userLastNameField, 1, 5);
+		userLastNameField.getStyleClass().add("pass-field");
 
 		Button registerButton = new Button("Register");
+		registerButton.getStyleClass().add("button-click");
 		registerButton.setOnAction(event -> logIn());
-		GridPane.setHalignment(registerButton, HPos.RIGHT);
-		grid.add(registerButton, 1, 6);
+		GridPane.setHalignment(registerButton, HPos.LEFT);
+		registerButton.setMinWidth(160);
+		registerButton.setMinHeight(35);
+		grid.add(registerButton, 0, 6);
+		
 		Button backButton = new Button("Back");
+		backButton.getStyleClass().add("button-click");
 		backButton.setOnAction(event -> back());
-		GridPane.setHalignment(backButton, HPos.LEFT);
+		backButton.setMinWidth(160);
+		backButton.setMinHeight(35);
+		GridPane.setHalignment(backButton, HPos.RIGHT);
 		grid.add(backButton, 1, 6);
+		
+		Image image = new Image(getClass().getResourceAsStream("close2.png"));
+        Button button1 = new Button();
+        button1.getStyleClass().add("close-button");
+        button1.setGraphic(new ImageView(image));
+        button1.setOnAction(new EventHandler<ActionEvent>() {
+           @Override public void handle(ActionEvent e) {
+        	   Stage stage = (Stage) button1.getScene().getWindow();
+        	    stage.close();
+            }
+        });
 
 		notification = new Text("\n\n\n\n\n");
 		grid.add(notification, 1, 8);
 
-		Scene scene = new Scene(grid, 400, 400);
-		scene.getStylesheets().add(new File(path + "application.css").toURI().toString());
+		AnchorPane anchorPane = new AnchorPane();
+		AnchorPane.setBottomAnchor(grid, 0.0);
+		AnchorPane.setLeftAnchor(grid, 0.0);
+		AnchorPane.setRightAnchor(grid, 0.0);
+		AnchorPane.setTopAnchor(grid, 80.0);
+		AnchorPane.setRightAnchor(button1, 0.0);
+		AnchorPane.setTopAnchor(button1, 0.0);
+		anchorPane.getChildren().addAll(button1, grid);
+
+		Scene scene = new Scene(anchorPane, 700, 800);
+		scene.getStylesheets() .add(getClass().getResource("application.css").toExternalForm());
 
 		// Pressing Enter works as pressing button "Sign in"
 		grid.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
@@ -171,7 +224,7 @@ public class Register extends Application {
 
 		this.primaryStage.setMinHeight(275);
 		this.primaryStage.setMinWidth(300);
-
+		primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
@@ -186,14 +239,15 @@ public class Register extends Application {
 		}
 	}
 
-	public static boolean checkName(Uzytkownicy o1) {
-		if (o1.firstName.length() < 3) {
+	public static boolean checkName() {
+		if (userFirstNameField.getText().length() < 3) {
+			System.out.println(userFirstNameField.getText().length());
 			return false;
 		}
-		for (int i = 0; i < o1.firstName.length(); i++) {
-			if (o1.firstName.charAt(i) >= 65 && o1.firstName.charAt(i) <= 90) {
+		for (int i = 0; i < userFirstNameField.getText().length(); i++) {
+			if (userFirstNameField.getText().charAt(i) >= 65 && userFirstNameField.getText().charAt(i) <= 90) {
 
-			} else if (o1.firstName.charAt(i) >= 97 && o1.firstName.charAt(i) <= 122) {
+			} else if (userFirstNameField.getText().charAt(i) >= 97 && userFirstNameField.getText().charAt(i) <= 122) {
 
 			} else {
 				return false;
@@ -202,14 +256,14 @@ public class Register extends Application {
 		return true;
 	}
 
-	public static boolean checkLastName(Uzytkownicy o1) {
-		if (o1.lastName.length() < 3) {
+	public static boolean checkLastName() {
+		if (userLastNameField.getText().length() < 3) {
 			return false;
 		}
-		for (int i = 0; i < o1.lastName.length(); i++) {
-			if (o1.lastName.charAt(i) >= 65 && o1.lastName.charAt(i) <= 90) {
+		for (int i = 0; i < userLastNameField.getText().length(); i++) {
+			if (userLastNameField.getText().charAt(i) >= 65 && userLastNameField.getText().charAt(i) <= 90) {
 
-			} else if (o1.lastName.charAt(i) >= 97 && o1.lastName.charAt(i) <= 122) {
+			} else if (userLastNameField.getText().charAt(i) >= 97 && userLastNameField.getText().charAt(i) <= 122) {
 
 			} else {
 				return false;
@@ -218,15 +272,15 @@ public class Register extends Application {
 		return true;
 	}
 
-	public static boolean checkMail(Uzytkownicy o1) {
+	public static boolean checkMail() {
 		boolean tempMonkey = false;
 		boolean tempDot = false;
-		for (int i = 0; i < o1.mail.length(); i++) {
-			if (o1.mail.charAt(i) <= 32 && o1.mail.charAt(i) >= 122) {
+		for (int i = 0; i < userMailField.getText().length(); i++) {
+			if (userMailField.getText().charAt(i) <= 32 && userMailField.getText().charAt(i) >= 122) {
 				return false;
-			} else if (o1.mail.charAt(i) == 64)
+			} else if (userMailField.getText().charAt(i) == 64)
 				tempMonkey = true;
-			else if (o1.mail.charAt(i) == 46)
+			else if (userMailField.getText().charAt(i) == 46)
 				tempDot = true;
 		}
 		if (tempMonkey == true && tempDot == true)
@@ -235,19 +289,19 @@ public class Register extends Application {
 			return false;
 	}
 
-	public static boolean checkPassword(Uzytkownicy o1) {
+	public static boolean checkPassword() {
 		boolean tempBigChar = false;
 		boolean tempSmallChar = false;
 		boolean tempDigitChar = false;
-		if (o1.password.length() < 8) {
+		if (userPassField.getText().length() < 8) {
 			return false;
 		}
-		for (int i = 0; i < o1.password.length(); i++) {
-			if (o1.password.charAt(i) >= 65 && o1.password.charAt(i) <= 90) {
+		for (int i = 0; i < userPassField.getText().length(); i++) {
+			if (userPassField.getText().charAt(i) >= 65 && userPassField.getText().charAt(i) <= 90) {
 				tempSmallChar = true;
-			} else if (o1.password.charAt(i) >= 97 && o1.password.charAt(i) <= 122) {
+			} else if (userPassField.getText().charAt(i) >= 97 && userPassField.getText().charAt(i) <= 122) {
 				tempBigChar = true;
-			} else if (o1.password.charAt(i) >= 48 && o1.password.charAt(i) <= 57) {
+			} else if (userPassField.getText().charAt(i) >= 48 && userPassField.getText().charAt(i) <= 57) {
 				tempDigitChar = true;
 			} else {
 				return false;
@@ -267,39 +321,49 @@ public class Register extends Application {
 			return false;
 	}
 
-	boolean checkAll(Uzytkownicy o1) {
+	boolean checkAll() {
 		int c = 5;
 		StringBuilder builder = new StringBuilder("");
 		if (checkPasswordCorrect() == false) {
 			builder.append("Hasła się nie zgadzają\n");
 			c--;
 		}
-		if (checkPassword(o1) == false) {
+		if (checkPassword() == false) {
 			builder.append("").append("Złe hasło\n");
 			c--;
 		}
-		if (checkMail(o1) == false) {
+		if (checkMail() == false) {
 			builder.append("Zły mail\n");
 			c--;
 		}
-		if (checkName(o1) == false) {
+		if (checkName() == false) {
 			builder.append("Złe imie\n");
 			c--;
 		}
-		if (checkLastName(o1) == false) {
+		if (checkLastName() == false) {
 			builder.append("Złe nazwisko\n");
 			c--;
 		}
 		for (int i = 0; i < c; i++) {
 			builder.append("\n");
 		}
-		if (checkPassword(o1) == true && checkMail(o1) == true && checkName(o1) == true && checkLastName(o1) == true&&checkPasswordCorrect()==true)
+		if (checkPassword() == true && checkMail() == true && checkName() == true && checkLastName() == true&&checkPasswordCorrect()==true)
 			return true;
 		else {
 			notification.setText(builder.toString());
 			return false;
 		}
 	}
+	public String sha1(String input) throws NoSuchAlgorithmException {
+        MessageDigest mDigest = MessageDigest.getInstance("SHA1");
+        byte[] result = mDigest.digest(input.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < result.length; i++) {
+            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+        }
+         
+        return sb.toString();
+    }
 }
 
 class Uzytkownicy {
